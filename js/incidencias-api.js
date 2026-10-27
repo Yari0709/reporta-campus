@@ -2,12 +2,11 @@
 /**
  * MÓDULO DE DATOS (VERSIÓN DE DEMOSTRACIÓN)
  * Este archivo simula el comportamiento de PouchDB.
- * La compañera encargada de BD reemplazará el interior de estas funciones
  * manteniendo exactamente los mismos nombres, parámetros y retornos.
  */
 
 const API = (() => {
-    // Arreglo en memoria (se borra al recargar la página, como solicitaste).
+    // Arreglo en memoria (se borra al recargar la página).
     // Incluimos un par de datos de demostración para poder ver el diseño.
     let registros = [
         {
