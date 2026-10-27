@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReportaCampus - Mantenimiento Universitario</title>
+    <!-- Enlace a nuestra futura hoja de estilos -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ================= ENCABEZADO ================= -->
+    <header class="app-header">
+        <div class="logo-container">
+            <!-- Icono SVG sencillo simulando un edificio/universidad -->
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                <path d="M9 22v-4h6v4"></path>
+                <path d="M8 6h.01"></path>
+                <path d="M16 6h.01"></path>
+                <path d="M12 6h.01"></path>
+                <path d="M12 10h.01"></path>
+                <path d="M12 14h.01"></path>
+                <path d="M16 10h.01"></path>
+                <path d="M16 14h.01"></path>
+                <path d="M8 10h.01"></path>
+                <path d="M8 14h.01"></path>
+            </svg>
+            <div>
+                <h1>ReportaCampus</h1>
+                <p>Sistema local de reportes de mantenimiento del campus</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= NAVEGACIÓN ================= -->
+    <nav class="app-nav">
+        <button id="nav-dashboard" class="active">Panel y Listado</button>
+        <button id="nav-nuevo">Nueva Incidencia</button>
+    </nav>
+
+    <!-- ================= CONTENIDO PRINCIPAL ================= -->
+    <main class="app-main">
+        
+        <!-- VISTA 1: PANEL Y LISTADO -->
+        <section id="vista-dashboard" class="vista active">
+            
+            <!-- Indicadores -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total</h3>
+                    <span id="stat-total" class="stat-value">0</span>
+                </div>
+                <div class="stat-card pending">
+                    <h3>Pendientes</h3>
+                    <span id="stat-pendientes" class="stat-value">0</span>
+                </div>
+                <div class="stat-card process">
+                    <h3>En Proceso</h3>
+                    <span id="stat-proceso" class="stat-value">0</span>
+                </div>
+                <div class="stat-card resolved">
+                    <h3>Resueltas</h3>
+                    <span id="stat-resueltas" class="stat-value">0</span>
+                </div>
+            </div>
+
+            <!-- Controles de Lista (Búsqueda y Filtros) -->
+            <div class="list-controls">
+                <input type="text" id="filtro-texto" placeholder="Buscar por título o ubicación...">
+                <select id="filtro-estado">
+                    <option value="Todos">Todos los estados</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En proceso">En proceso</option>
+                    <option value="Resuelta">Resuelta</option>
+                </select>
+            </div>
+
+            <!-- Listado de Incidencias -->
+            <div class="table-container">
+                <table id="tabla-incidencias">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Ubicación</th>
+                            <th>Categoría</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-incidencias-body">
+                        <!-- Las filas se insertarán aquí con JavaScript -->
+                        <tr>
+                            <td colspan="7" class="empty-state">No hay reportes para mostrar.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VISTA 2: FORMULARIO DE NUEVA INCIDENCIA -->
+        <section id="vista-nuevo" class="vista hidden">
+            <div class="form-wrapper">
+                <form id="form-registro" class="app-form">
+                    
+                    <div class="form-header">
+                        <h2>Registrar Incidencia</h2>
+                        <p>Ingresa los detalles del problema para el equipo de mantenimiento.</p>
+                    </div>
+                    
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label for="reg-titulo">Título del reporte <span class="required">*</span></label>
+                            <input type="text" id="reg-titulo" required minlength="5" maxlength="80" placeholder="Ej. Lámpara fundida en pasillo principal">
+                            <small class="hint-text">
+                                <span>De 5 a 80 caracteres.</span>
+                                <span><strong id="char-titulo">0</strong> / 80</span>
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reg-ubicacion">Ubicación <span class="required">*</span></label>
+                            <input type="text" id="reg-ubicacion" required placeholder="Ej. Laboratorio 2, Edificio B">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reg-categoria">Categoría <span class="required">*</span></label>
+                                <select id="reg-categoria" required>
+                                    <option value="" disabled selected>Selecciona una opción...</option>
+                                    <option value="Iluminación">Iluminación</option>
+                                    <option value="Plomería">Plomería</option>
+                                    <option value="Equipamiento">Equipamiento</option>
+                                    <option value="Mobiliario">Mobiliario</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="reg-prioridad">Prioridad <span class="required">*</span></label>
+                                <select id="reg-prioridad" required>
+                                    <option value="Baja">Baja</option>
+                                    <option value="Media" selected>Media</option>
+                                    <option value="Alta">Alta</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reg-estado">Estado inicial</label>
+                            <input type="text" id="reg-estado" value="Pendiente" disabled class="disabled-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reg-descripcion">Descripción detallada <span class="required">*</span></label>
+                            <textarea id="reg-descripcion" required minlength="10" maxlength="300" rows="4" placeholder="Describe brevemente el problema encontrado..."></textarea>
+                            <small class="hint-text">
+                                <span>De 10 a 300 caracteres.</span>
+                                <span><strong id="char-descripcion">0</strong> / 300</span>
+                            </small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="btn-cancelar-registro">Cancelar</button>
+                            <button type="submit" class="btn-primary">Guardar Reporte</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= MODALES ================= -->
+    
+    <!-- Modal para Editar Incidencia (Usamos la etiqueta <dialog> nativa de HTML5) -->
+    <dialog id="modal-editar" class="modal">
+        <div class="modal-content">
+            <h3>Editar Incidencia</h3>
+            <form id="form-editar">
+                <p><strong>Editando:</strong> <span id="edit-titulo-display"></span></p>
+                
+                <div class="form-group">
+                    <label for="edit-estado">Estado</label>
+                    <select id="edit-estado" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En proceso">En proceso</option>
+                        <option value="Resuelta">Resuelta</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-prioridad">Prioridad</label>
+                    <select id="edit-prioridad" required>
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-descripcion">Descripción</label>
+                    <textarea id="edit-descripcion" required minlength="10" maxlength="300" rows="4"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btn-cerrar-editar">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Modal para Confirmar Eliminación -->
+    <dialog id="modal-eliminar" class="modal">
+        <div class="modal-content">
+            <h3>Confirmar eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar el reporte <strong id="del-titulo-display"></strong>?</p>
+            <p class="warning-text">Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" id="btn-cerrar-eliminar">Cancelar</button>
+                <button type="button" class="btn-danger" id="btn-confirmar-eliminar">Sí, eliminar</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- ================= CONTENEDOR DE NOTIFICACIONES (TOASTS) ================= -->
+    <div id="toast-container"></div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <!-- El archivo del contrato (Simulador de Base de datos) va primero -->
+    <script src="js/incidencias-api.js"></script>
+    <!-- El archivo con la lógica de la interfaz va después -->
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+/* ==========================================================================
+   1. VARIABLES GLOBALES Y RESET
+   ========================================================================== */
+:root {
+    --primario: #0F172A;
+    --secundario: #3B82F6;
+    --fondo: #F8FAFC;
+    --superficie: #FFFFFF;
+    --texto: #1E293B;
+    --texto-claro: #64748B;
+    --borde: #E2E8F0;
+
+    /* Colores Semánticos (Pasteles para Badges) */
+    --bg-peligro: #FEE2E2;
+    --text-peligro: #991B1B;
+    --bg-alerta: #FEF3C7;
+    --text-alerta: #92400E;
+    --bg-exito: #D1FAE5;
+    --text-exito: #065F46;
+
+    --fuente: system-ui, -apple-system, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fuente);
+    background-color: var(--fondo);
+    color: var(--texto);
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   2. ENCABEZADO Y NAVEGACIÓN
+   ========================================================================== */
+.app-header {
+    background-color: var(--primario);
+    color: var(--superficie);
+    padding: 1.25rem 2rem;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo-container h1 {
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+}
+
+.logo-container p {
+    font-size: 0.85rem;
+    color: #94A3B8;
+}
+
+.app-nav {
+    background-color: var(--superficie);
+    border-bottom: 1px solid var(--borde);
+    padding: 0 2rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.app-nav button {
+    background: none;
+    border: none;
+    padding: 1rem 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--texto-claro);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.app-nav button:hover {
+    color: var(--texto);
+}
+
+.app-nav button.active {
+    color: var(--secundario);
+    border-bottom-color: var(--secundario);
+}
+
+/* ==========================================================================
+   3. CONTENEDOR PRINCIPAL
+   ========================================================================== */
+.app-main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.vista {
+    display: none;
+}
+
+.vista.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   4. PANEL DE INDICADORES
+   ========================================================================== */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: var(--superficie);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    text-align: center;
+    border: 1px solid var(--borde);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.stat-card:nth-child(1)::before {
+    background: var(--texto-claro);
+}
+
+.stat-card.pending::before {
+    background: #EF4444;
+}
+
+.stat-card.process::before {
+    background: #F59E0B;
+}
+
+.stat-card.resolved::before {
+    background: #10B981;
+}
+
+.stat-card h3 {
+    font-size: 0.9rem;
+    color: var(--texto-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--texto);
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* ==========================================================================
+   5. TABLA Y CONTROLES
+   ========================================================================== */
+.list-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.list-controls input,
+.list-controls select {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background-color: var(--superficie);
+    flex: 1;
+    min-width: 200px;
+}
+
+.table-container {
+    background: var(--superficie);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--borde);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: #F8FAFC;
+    font-weight: 600;
+    color: var(--texto-claro);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background-color: #F1F5F9;
+}
+
+/* Badges (Etiquetas de color) */
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-peligro {
+    background-color: var(--bg-peligro);
+    color: var(--text-peligro);
+}
+
+.badge-alerta {
+    background-color: var(--bg-alerta);
+    color: var(--text-alerta);
+}
+
+.badge-exito {
+    background-color: var(--bg-exito);
+    color: var(--text-exito);
+}
+
+/* ==========================================================================
+   6. FORMULARIOS Y MODALES
+   ========================================================================== */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0 3rem 0;
+}
+
+.app-form {
+    background: var(--superficie);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border: 1px solid var(--borde);
+    width: 100%;
+    max-width: 650px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.form-header {
+    background-color: #F8FAFC;
+    border-bottom: 1px solid var(--borde);
+    padding: 1.5rem 2.5rem;
+}
+
+.form-header h2 {
+    color: var(--primario);
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+}
+
+.form-header p {
+    color: var(--texto-claro);
+    font-size: 0.9rem;
+}
+
+.form-body {
+    padding: 2rem 2.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--texto);
+}
+
+.required {
+    color: #EF4444;
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-family: var(--fuente);
+    background-color: var(--superficie);
+    transition: all 0.2s;
+    color: var(--texto);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--secundario);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.disabled-input {
+    background-color: #F1F5F9 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed;
+    border: 1px dashed #CBD5E1 !important;
+}
+
+.hint-text {
+    display: flex;
+    justify-content: space-between;
+    color: var(--texto-claro);
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+}
+
+/* Botones */
+.form-actions,
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--secundario);
+    color: var(--superficie);
+}
+
+.btn-primary:hover {
+    background-color: #2563EB;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: var(--superficie);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+}
+
+.btn-secondary:hover {
+    background-color: #F1F5F9;
+}
+
+.btn-danger {
+    background-color: #EF4444;
+    color: var(--superficie);
+}
+
+.btn-danger:hover {
+    background-color: #DC2626;
+}
+
+.btn-icon {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Modales */
+.modal {
+    margin: auto;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 500px;
+    width: 90%;
+    padding: 2.5rem;
+}
+
+.modal::backdrop {
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.modal h3 {
+    margin-bottom: 1.5rem;
+    color: var(--primario);
+    font-size: 1.25rem;
+}
+
+.warning-text {
+    color: #EF4444;
+    font-weight: 500;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   7. NOTIFICACIONES FLOTANTES (TOASTS)
+   ========================================================================== */
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 280px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: var(--superficie);
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    animation: slideInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast.success {
+    background-color: #10B981;
+    border-left: 6px solid #059669;
+}
+
+.toast.success::before {
+    content: '✓';
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.toast.error {
+    background-color: #EF4444;
+    border-left: 6px solid #DC2626;
+}
+
+.toast.error::before {
+    content: '✕';
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.toast.info {
+    background-color: var(--primario);
+    border-left: 6px solid var(--secundario);
+}
+
+.toast.info::before {
+    content: 'ℹ';
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   8. UTILIDADES
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   9. RESPONSIVO
+   ========================================================================== */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .list-controls {
+        flex-direction: column;
+    }
+
+    .app-nav {
+        padding: 0 1rem;
+        gap: 1rem;
+    }
+}
